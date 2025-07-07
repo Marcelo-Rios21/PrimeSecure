@@ -57,4 +57,13 @@ public class PrimesList extends ArrayList<Integer>{
             lock.unlock();
         }
     }  
+
+    public int getPrimesCount() {
+        lock.lock();
+        try {
+            return this.size();
+        } finally {
+            lock.unlock();
+        }
+    }
 }
