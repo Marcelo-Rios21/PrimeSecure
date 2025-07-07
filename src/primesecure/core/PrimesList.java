@@ -2,8 +2,10 @@ package primesecure.core;
 
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
+import primesecure.model.CodigoMensaje;
+import static primesecure.util.Utilidades.isPrime;
 
-public class PrimesList extends ArrayList<Integer>{
+public class PrimesList extends ArrayList<CodigoMensaje>{
 
     private final ReentrantLock lock = new ReentrantLock(); //bloqueo para acceso concurrente
 
@@ -17,26 +19,14 @@ public class PrimesList extends ArrayList<Integer>{
         super(capacidadInicial);
     }
 
-    private boolean isPrime(int n) {
-        if (n <= 1) return false;
-        if (n == 2) return true;
-        if (n % 2 == 0) return false;
-
-        int raiz = (int) Math.sqrt(n);
-        for (int i = 3; i <= raiz; i += 2) {
-            if (n % i == 0) return false;
-        }
-        return true;
-    }
-
     @Override
-    public boolean add(Integer n) {
+    public boolean add(CodigoMensaje codigo) {
         lock.lock(); //garantiza exclusion
         try {
-            if (!isPrime(n)) {
+            if (!isPrime(codigo.getCodigoPrimo())) {
                 throw new IllegalArgumentException(ERROR_NO_PRIMO);
             }
-            return super.add(n);
+            return super.add(codigo);
         } finally {
             lock.unlock(); //libera el bloque
         }
@@ -46,10 +36,10 @@ public class PrimesList extends ArrayList<Integer>{
     public boolean remove(Object o) {
         lock.lock();
         try {
-            if (o instanceof Integer) {
-                Integer n = (Integer) o;
-                if (isPrime(n)) {
-                    return super.remove(n);
+            if (o instanceof CodigoMensaje) {
+                CodigoMensaje cm = (CodigoMensaje) o;
+                if (isPrime(cm.getCodigoPrimo())) {
+                    return super.remove(cm);
                 }
             }
             return false; // si no es un numero o no primo, no remueve

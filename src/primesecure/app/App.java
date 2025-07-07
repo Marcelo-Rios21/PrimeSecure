@@ -1,9 +1,9 @@
 package primesecure.app;
 
-import primesecure.core.PrimesList;
+import primesecure.ui.SistemaConsola;
 
 public class App {
     public static void main(String[] args) {
-        PrimesList lista = new PrimesList();
+       new SistemaConsola().iniciar();
     }
 }
