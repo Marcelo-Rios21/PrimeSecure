@@ -1,6 +1,7 @@
 package primesecure.ui;
 
 import java.util.Scanner;
+import primesecure.concurrent.PrimesThread;
 import primesecure.core.GestorCodigos;
 
 public class SistemaConsola {
@@ -23,6 +24,7 @@ public class SistemaConsola {
                 case 3 -> buscarMensajePorCodigo();
                 case 4 -> mostrarTodosLosCodigos();
                 case 5 -> mostrarCantidadTotal();
+                case 6 -> ejecutarGeneradorConcurrente();
                 case 0 -> System.out.println("Saliendo... Hasta pronto!");
                 default -> System.out.println("Opcion invalida. Intente nuevamente.");
             }
@@ -36,6 +38,7 @@ public class SistemaConsola {
         System.out.println("3. Buscar mensaje por codigo primo.");
         System.out.println("4. Mostrar todos los codigos.");
         System.out.println("5. Mostrar cantidad total.");
+        System.out.println("6. Generar numeros primos.");
         System.out.println("0. Salir.");
     }
 
@@ -88,5 +91,28 @@ public class SistemaConsola {
             }
         }
     }
-    
+
+    private void ejecutarGeneradorConcurrente() {
+        System.out.println(" --- Generador ---");
+        int cantidadHilos = leerEntero("Cuantos hilos desea ejecutar?");
+        int ciclosPorHilo = leerEntero("Cuantos ciclos debe ejecutar cada hilo?");
+
+        Thread[] hilos = new Thread[cantidadHilos];
+
+        for (int i = 0; i < cantidadHilos; i++) {
+            PrimesThread tarea = new PrimesThread(ciclosPorHilo, gestor.getListaCompartida());
+            hilos[i] = new Thread(tarea, "Hilo-" + (i+1));
+            hilos[i].start();
+        }
+
+        for (Thread hilo : hilos) {
+            try {
+                hilo.join();
+            } catch (InterruptedException e) {
+                System.out.println("Hilo interrumpido: " + hilo.getName());
+            }
+        }
+
+        System.out.println("Total de primos generados: " + gestor.getListaCompartida().getPrimesCount());
+    }
 }

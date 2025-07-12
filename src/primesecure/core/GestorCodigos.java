@@ -72,4 +72,8 @@ public class GestorCodigos {
     public List<CodigoMensaje> getListaCompleta() {
         return codigos;
     }
+
+    public PrimesList getListaCompartida() {
+        return this.codigos;
+    }
 }
