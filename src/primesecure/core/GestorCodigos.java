@@ -1,5 +1,9 @@
 package primesecure.core;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import primesecure.model.CodigoMensaje;
 import static primesecure.util.Utilidades.isPrime;
@@ -75,5 +79,39 @@ public class GestorCodigos {
 
     public PrimesList getListaCompartida() {
         return this.codigos;
+    }
+
+    public void cargarPrimosDesdeCSV(String ruta) {
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            String linea;
+            while ((linea = br.readLine()) !=null) {
+                String[] partes = linea.split(",");
+                for (String parte : partes) {
+                    try {
+                        int candidato = Integer.parseInt(parte.trim());
+                        CodigoMensaje nuevo = new CodigoMensaje(candidato, "Importado desde CSV");
+                        codigos.add(nuevo);
+                        System.out.println("Agregado desde archivo: " + candidato);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Formato invalido: " + parte);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Ignorado (No primo): " + parte);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
+    }
+
+    public void guardarCodigosEncriptados(String archivo) {
+        try (FileWriter wr = new FileWriter(archivo)) {
+            for (CodigoMensaje cm : codigos) {
+                wr.write(cm.getCodigoPrimo() + "|" + cm.getMensaje() + System.lineSeparator());
+            }
+            System.out.println("Codigos guardados en archivo: " + archivo);
+        } catch (IOException e) {
+            System.out.println("Error al guardar archivo: " + e.getMessage());
+        }
     }
 }

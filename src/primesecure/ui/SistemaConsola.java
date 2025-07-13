@@ -25,6 +25,7 @@ public class SistemaConsola {
                 case 4 -> mostrarTodosLosCodigos();
                 case 5 -> mostrarCantidadTotal();
                 case 6 -> ejecutarGeneradorConcurrente();
+                case 7 -> exportarListaCSV();
                 case 0 -> System.out.println("Saliendo... Hasta pronto!");
                 default -> System.out.println("Opcion invalida. Intente nuevamente.");
             }
@@ -39,6 +40,7 @@ public class SistemaConsola {
         System.out.println("4. Mostrar todos los codigos.");
         System.out.println("5. Mostrar cantidad total.");
         System.out.println("6. Generar numeros primos.");
+        System.out.println("7. Exportar lista a archivo CSV.");
         System.out.println("0. Salir.");
     }
 
@@ -114,5 +116,12 @@ public class SistemaConsola {
         }
 
         System.out.println("Total de primos generados: " + gestor.getListaCompartida().getPrimesCount());
+    }
+
+    private void exportarListaCSV() {
+        System.out.println("Ingrese el nombre del archivo a guardar: ");
+        String nombreArchivo = input.nextLine();
+
+        gestor.guardarCodigosEncriptados(nombreArchivo);
     }
 }
