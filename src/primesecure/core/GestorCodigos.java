@@ -114,4 +114,28 @@ public class GestorCodigos {
             System.out.println("Error al guardar archivo: " + e.getMessage());
         }
     }
+
+    public void cargarCodigosDesdeCSV(String archivo) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) !=null) {
+                String[] partes = linea.split("\\|");
+                if (partes.length == 2) {
+                    try {
+                        int codigo = Integer.parseInt(partes[0].trim());
+                        String mensaje = partes[1].trim();
+                        codigos.add(new CodigoMensaje(codigo, mensaje));
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error de formato en linea: " + linea);
+                    }
+                } else {
+                    System.out.println("Linea mal formada: " + linea);
+                }
+            }
+            System.out.println("Carga de codigos completada desde: " + archivo);
+            
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
+    }
 }

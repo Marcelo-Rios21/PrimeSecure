@@ -26,6 +26,7 @@ public class SistemaConsola {
                 case 5 -> mostrarCantidadTotal();
                 case 6 -> ejecutarGeneradorConcurrente();
                 case 7 -> exportarListaCSV();
+                case 8 -> inportarCodigosCSV();
                 case 0 -> System.out.println("Saliendo... Hasta pronto!");
                 default -> System.out.println("Opcion invalida. Intente nuevamente.");
             }
@@ -41,6 +42,7 @@ public class SistemaConsola {
         System.out.println("5. Mostrar cantidad total.");
         System.out.println("6. Generar numeros primos.");
         System.out.println("7. Exportar lista a archivo CSV.");
+        System.out.println("8. Cargar codigos desde archivo.");
         System.out.println("0. Salir.");
     }
 
@@ -123,5 +125,11 @@ public class SistemaConsola {
         String nombreArchivo = input.nextLine();
 
         gestor.guardarCodigosEncriptados(nombreArchivo);
+    }
+
+    private void inportarCodigosCSV() {
+        System.out.println("Nombre del archivo para cargar: ");
+        String archivo = input.nextLine();
+        gestor.cargarCodigosDesdeCSV(archivo);
     }
 }
